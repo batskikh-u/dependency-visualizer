@@ -1,5 +1,5 @@
-import tomllib
 import re
+import tomllib
 from pathlib import Path
 from urllib.parse import urlparse
 

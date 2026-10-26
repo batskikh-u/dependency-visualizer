@@ -1,6 +1,6 @@
-package_name = "requests"
+package_name = "A"
 repository = "./test-repository.txt"
 test_repository_mode = true
-version = "2.32.0"
+version = "1.0.0"
 ascii_tree = true
 filter_substring = "test"
