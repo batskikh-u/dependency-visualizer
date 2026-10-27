@@ -1,0 +1,6 @@
+package_name = "G"
+repository = "tests/stage3/repository.json"
+test_repository_mode = true
+version = "1.0.0"
+ascii_tree = true
+filter_substring = ""
