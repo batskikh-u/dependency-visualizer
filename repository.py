@@ -6,6 +6,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import urlopen
 
+GROUP_NUM = 1
 
 def read_test_repository(file_name):
     path = Path(file_name)
@@ -30,10 +31,12 @@ def get_test_dependencies(repository, package_name):
     return dependencies
 
 
-def fetch_package_metadata(repository, package_name, version):
+def fetch_package_metadata(repository, package_name, version=None):
     package = quote(package_name, safe="")
-    release = quote(version, safe="")
-    url = f"{repository.rstrip('/')}/{package}/{release}/json"
+    url = f"{repository.rstrip('/')}/{package}"
+    if version:
+        url += f"/{quote(version, safe='')}"
+    url += "/json"
     try:
         with urlopen(url, timeout=10) as response:
             return json.load(response)
@@ -59,16 +62,17 @@ def normalize_dependency(requirement):
     match = re.match(r"\s*([A-Za-z0-9][A-Za-z0-9._-]*)", requirement)
     if not match:
         raise ValueError(f"Не удалось разобрать зависимость: {requirement}")
-    return match.group(1)
+    name = match.group(GROUP_NUM)
+    return re.sub(r"[-_.]+", "-", name).lower()
 
 
-def get_direct_dependencies(config):
+def get_dependencies(config, package_name, version=None):
     if config["test_repository_mode"]:
         repository = read_test_repository(config["repository"])
-        return get_test_dependencies(repository, config["package_name"])
+        return get_test_dependencies(repository, package_name)
     metadata = fetch_package_metadata(
-        config["repository"],
-        config["package_name"],
-        config["version"],
+        config["repository"], package_name, version
     )
-    return extract_dependencies(metadata)
+    requirements = extract_dependencies(metadata)
+    names = [normalize_dependency(item) for item in requirements]
+    return list(dict.fromkeys(names))
