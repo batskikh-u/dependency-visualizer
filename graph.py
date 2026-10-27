@@ -17,9 +17,6 @@ def process_queue(queue, index, graph, visited, config, depth=ZERO_MODE):
     if index >= len(queue):
         return
 
-    if depth >= MAX_RECURSION_DEPTH:
-        return
-
     package, version = queue[index]
     key = normalize_name(package)
 
