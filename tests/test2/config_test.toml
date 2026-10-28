@@ -1,5 +1,5 @@
 package_name = "A"
-repository = "./test-repository.txt"
+repository = "tests/test2/test-repository.txt"
 test_repository_mode = true
 version = "1.0.0"
 ascii_tree = true

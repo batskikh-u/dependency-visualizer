@@ -1,5 +1,5 @@
 import sys
-from config import read_config
+from src.config import read_config
 from repository import get_direct_dependencies
 
 FILES_NUMBER = 2
@@ -23,7 +23,7 @@ def main():
         print("Ошибка: укажите не более одного файла")
         return
 
-    file_name = "config_real.toml"
+    file_name = "../tests/test2/config_real.toml"
     if len(sys.argv) == FILES_NUMBER:
         file_name = sys.argv[CONFIG_QUEUE]
 
