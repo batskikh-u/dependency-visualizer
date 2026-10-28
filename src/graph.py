@@ -1,5 +1,5 @@
 import re
-from src.repository import get_dependencies
+from repository import get_dependencies
 
 INDEX_GROW = 1
 ZERO_MODE = 0
