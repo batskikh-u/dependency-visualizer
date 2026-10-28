@@ -1,7 +1,7 @@
 
 import sys
 
-from config import read_config
+from src.config import read_config
 from graph import build_graph, print_graph
 
 FILES_NUMBER = 2

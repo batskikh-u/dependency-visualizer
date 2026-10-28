@@ -7,6 +7,7 @@ PARENTS_NUM = 2
 
 ROOT = Path(__file__).resolve().parents[PARENTS_NUM]
 CONFIG_DIR = Path(__file__).resolve().parent
+MAIN = ROOT / "src" / "main.py"
 
 SCENARIOS = [
     ("Транзитивные зависимости", "config_basic.toml"),
@@ -18,25 +19,38 @@ SCENARIOS = [
 
 
 def main():
+    failed = False
 
     for title, config_name in SCENARIOS:
         config_path = CONFIG_DIR / config_name
-        print(title)
+        print(f"\n=== {title} ===")
 
         env = os.environ.copy()
         env["PYTHONUTF8"] = "1"
+        env["PYTHONPATH"] = os.pathsep.join(
+            [str(ROOT / "src"), str(ROOT), env.get("PYTHONPATH", "")]
+        )
 
         result = subprocess.run(
-            [sys.executable, str(ROOT / "main.py"), str(config_path)],
+            [sys.executable, str(MAIN), str(config_path)],
             cwd=ROOT,
             capture_output=True,
             text=True,
             encoding="utf-8",
+            errors="replace",
             env=env,
         )
+
         print(result.stdout, end="")
         if result.stderr:
             print(result.stderr, end="")
+
+        if result.returncode != 0:
+            failed = True
+            print(f"Сценарий завершился с ошибкой: {title}")
+
+    if failed:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

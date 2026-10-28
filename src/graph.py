@@ -1,5 +1,5 @@
 import re
-from repository import get_dependencies
+from src.repository import get_dependencies
 
 INDEX_GROW = 1
 ZERO_MODE = 0
@@ -17,7 +17,7 @@ def process_queue(queue, index, graph, visited, config, depth=ZERO_MODE):
     if index >= len(queue):
         return
 
-    if depth >= MAX_RECURSION_DEPTH:
+    if not config["test_repository_mode"] and depth >= MAX_RECURSION_DEPTH:
         return
 
     package, version = queue[index]
