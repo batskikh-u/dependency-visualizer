@@ -1,0 +1,7 @@
+package_name = "D"
+repository = "tests/stage4/repository.json"
+test_repository_mode = true
+version = "1.0.0"
+ascii_tree = true
+filter_substring = "B"
+operation = "reverse_dependencies"
