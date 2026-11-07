@@ -1,7 +1,9 @@
 import sys
 
 from config import read_config
-from graph import build_graph, print_graph
+from graph import (build_graph, print_graph,
+                   build_reverse_graph,
+                   print_reverse_graph)
 
 FILES_NUMBER = 2
 CONFIG_QUEUE = 1
@@ -15,7 +17,8 @@ def print_config(config):
 
 def main():
     if len(sys.argv) > FILES_NUMBER:
-        print("Ошибка: укажите не более одного файла")
+        print("Ошибка: укажите не "
+              "более одного файла")
         return
 
     file_name = "config.toml"
@@ -24,8 +27,13 @@ def main():
 
     try:
         config = read_config(file_name)
-        graph = build_graph(config)
-        print_graph(graph)
+        if (config.get("operation") ==
+                "reverse_dependencies"):
+            graph = build_reverse_graph(config)
+            print_reverse_graph(graph)
+        else:
+            graph = build_graph(config)
+            print_graph(graph)
     except ValueError as error:
         print(f"Ошибка: {error}")
 

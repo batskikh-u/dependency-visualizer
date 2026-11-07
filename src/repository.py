@@ -59,7 +59,8 @@ def extract_dependencies(metadata):
 
 
 def normalize_dependency(requirement):
-    match = re.match(r"\s*([A-Za-z0-9][A-Za-z0-9._-]*)", requirement)
+    match = re.match(r"\s*([A-Za-z0-9][A-Za-z0-9._-]*)",
+                     requirement)
     if not match:
         raise ValueError(f"Не удалось разобрать зависимость: {requirement}")
     name = match.group(GROUP_NUM)
@@ -76,3 +77,29 @@ def get_dependencies(config, package_name, version=None):
     requirements = extract_dependencies(metadata)
     names = [normalize_dependency(item) for item in requirements]
     return list(dict.fromkeys(names))
+
+def get_reverse_dependency_map(config):
+    if not config["test_repository_mode"]:
+        raise ValueError (
+            "Режим обратных зависимостей доступен "
+            "только для тествого репозитория"
+        )
+    repository = read_test_repository(config["repository"])
+    reverse_map = {}
+
+    for package, dependencies in repository.items():
+        if not isinstance(package, str):
+            raise ValueError(
+                "Названия пакетов должны быть строками"
+            )
+        if not isinstance(dependencies, list) or not all(
+        isinstance(item, str) for item in dependencies
+        ):
+            raise ValueError(
+                f"Некорректный список зависимостей пакета {package}"
+            )
+        reverse_map.setdefault(package, [])
+
+        for dependency in dependencies:
+            reverse_map.setdefault(dependency, []).append(package)
+    return reverse_map
