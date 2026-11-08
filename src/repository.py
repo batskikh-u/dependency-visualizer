@@ -14,7 +14,8 @@ def read_test_repository(file_name):
         with path.open("r", encoding="utf-8") as file:
             data = json.load(file)
     except (OSError, json.JSONDecodeError) as error:
-        raise ValueError(f"Ошибка тестового репозитория: {error}") from error
+        raise ValueError(f"Ошибка тестового репозитория: "
+                         f"{error}") from error
     if not isinstance(data, dict):
         raise ValueError("Описание репозитория должно быть JSON-объектом")
     return data
@@ -43,7 +44,8 @@ def fetch_package_metadata(repository, package_name, version=None):
     except HTTPError as error:
         raise ValueError(f"Ошибка HTTP: {error.code}, {url}") from error
     except URLError as error:
-        raise ValueError(f"Не удалось подключиться: {error.reason}") from error
+        raise ValueError(f"Не удалось подключиться: "
+                         f"{error.reason}") from error
     except (json.JSONDecodeError, UnicodeDecodeError) as error:
         raise ValueError("Сервер вернул некорректный JSON") from error
 
@@ -59,9 +61,11 @@ def extract_dependencies(metadata):
 
 
 def normalize_dependency(requirement):
-    match = re.match(r"\s*([A-Za-z0-9][A-Za-z0-9._-]*)", requirement)
+    match = re.match(r"\s*([A-Za-z0-9][A-Za-z0-9._-]*)",
+                     requirement)
     if not match:
-        raise ValueError(f"Не удалось разобрать зависимость: {requirement}")
+        raise ValueError(f"Не удалось разобрать зависимость: "
+                         f"{requirement}")
     name = match.group(GROUP_NUM)
     return re.sub(r"[-_.]+", "-", name).lower()
 
@@ -80,7 +84,8 @@ def get_dependencies(config, package_name, version=None):
 def get_reverse_dependency_map(config):
     if not config["test_repository_mode"]:
         raise ValueError (
-            "Режим обратных зависимостей доступен только для тествого репозитория"
+            "Режим обратных зависимостей доступен "
+            "только для тествого репозитория"
         )
     repository = read_test_repository(config["repository"])
     reverse_map = {}

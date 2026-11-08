@@ -4,7 +4,7 @@ set PYTHONUTF8=1
 
 cd /d "%~dp0"
 
-python tests\stage4\run_demos.py
+python tests\stage5\run_demos.py
 
 echo.
 

@@ -1,7 +1,14 @@
 import sys
 
 from config import read_config
-from graph import build_graph, print_graph, build_reverse_graph, print_reverse_graph
+from graph import (
+    build_graph,
+    print_graph,
+    build_reverse_graph,
+    print_reverse_graph
+)
+from visualization import show_graph, print_ascii_tree
+
 
 FILES_NUMBER = 2
 CONFIG_QUEUE = 1
@@ -30,6 +37,14 @@ def main():
         else:
             graph = build_graph(config)
             print_graph(graph)
+
+        show_graph(graph, config["package_name"])
+
+        if config["ascii_tree"]:
+            print_ascii_tree(
+                graph, config["package_name"]
+            )
+
     except ValueError as error:
         print(f"Ошибка: {error}")
 

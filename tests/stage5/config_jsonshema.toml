@@ -1,0 +1,6 @@
+package_name = "jsonschema"
+repository = "https://pypi.org/pypi"
+test_repository_mode = false
+version = "4.25.0"
+ascii_tree = true
+filter_substring = ""
